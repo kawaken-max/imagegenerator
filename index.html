@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像合成ジェネレーター</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>画像合成ジェネレーター</h1>
+            <p>写真にAIを使って部品や部材を合成し、完成予想イメージを作成します</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <div class="upload-area" id="baseImageUpload">
+                    <div class="upload-content">
+                        <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m21 15-6-6-6 6"/>
+                            <path d="M12 3v12"/>
+                            <rect x="3" y="19" width="18" height="2"/>
+                        </svg>
+                        <p class="upload-text">ベース写真をアップロード</p>
+                        <p class="upload-subtext">ドラッグ＆ドロップまたはクリックして選択</p>
+                    </div>
+                    <input type="file" id="baseImageInput" accept="image/*" hidden>
+                </div>
+
+                <div class="upload-area" id="componentImageUpload">
+                    <div class="upload-content">
+                        <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                            <circle cx="12" cy="13" r="3"/>
+                        </svg>
+                        <p class="upload-text">部品・部材画像をアップロード</p>
+                        <p class="upload-subtext">合成したい画像を選択</p>
+                    </div>
+                    <input type="file" id="componentImageInput" accept="image/*" hidden>
+                </div>
+            </div>
+
+            <div class="workspace" id="workspace" style="display: none;">
+                <div class="canvas-container">
+                    <canvas id="compositeCanvas"></canvas>
+                </div>
+
+                <div class="controls-panel">
+                    <div class="control-group">
+                        <label for="promptInput">AIプロンプト</label>
+                        <textarea id="promptInput" placeholder="貼り付け位置や方法を詳しく指示してください（例：建物の右側に自然に配置、影も追加）"></textarea>
+                    </div>
+
+                    <div class="control-group">
+                        <label>貼り付け方法</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="blendMode" value="normal" checked> 通常</label>
+                            <label><input type="radio" name="blendMode" value="multiply"> 乗算</label>
+                            <label><input type="radio" name="blendMode" value="overlay"> オーバーレイ</label>
+                            <label><input type="radio" name="blendMode" value="soft-light"> ソフトライト</label>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="opacitySlider">透明度: <span id="opacityValue">100</span>%</label>
+                        <input type="range" id="opacitySlider" min="0" max="100" value="100">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="scaleSlider">サイズ: <span id="scaleValue">100</span>%</label>
+                        <input type="range" id="scaleSlider" min="10" max="200" value="100">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="rotationSlider">回転: <span id="rotationValue">0</span>°</label>
+                        <input type="range" id="rotationSlider" min="-180" max="180" value="0">
+                    </div>
+
+                    <div class="button-group">
+                        <button id="resetBtn" class="btn btn-secondary">リセット</button>
+                        <button id="generateBtn" class="btn btn-primary">AI合成実行</button>
+                        <button id="downloadBtn" class="btn btn-success">ダウンロード</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-section" id="previewSection" style="display: none;">
+                <h3>プレビュー</h3>
+                <div class="preview-container">
+                    <img id="previewImage" alt="合成プレビュー">
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
